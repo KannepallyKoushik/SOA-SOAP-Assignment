@@ -7,7 +7,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 @ShellComponent
-public class CalculateCommands {
+public class InventoryCommands {
 
     @Autowired private InventoryService inventoryService;
 
@@ -21,6 +21,8 @@ public class CalculateCommands {
 
     @ShellMethod("Buy new inventory")
     public String purchase() {
+
+        // Do a request to the Purchase service
 
         inventoryService.addInventory(50);
 

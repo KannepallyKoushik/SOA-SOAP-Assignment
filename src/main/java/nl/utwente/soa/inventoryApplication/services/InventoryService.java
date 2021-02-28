@@ -12,8 +12,8 @@ public class InventoryService {
         return InventoryService.currentInventory;
     }
 
-    public void addInventory(int ammount){
-        InventoryService.currentInventory += currentInventory;
+    public void addInventory(int amount){
+        InventoryService.currentInventory += amount;
     }
 
     public void subtractInventory(int amount){

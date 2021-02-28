@@ -9,32 +9,26 @@ import org.springframework.shell.standard.ShellMethod;
 @ShellComponent
 public class InventoryCommands {
 
-    @Autowired private InventoryService inventoryService;
+	@Autowired
+	private InventoryService inventoryService;
 
-    @ShellMethod("Sell inventory")
-    public String sell(
-        int amount
-    ) {
-        inventoryService.subtractInventory(amount);
-        return "Sold inventory";
-    }
+	@ShellMethod("Sell inventory")
+	public String sell(int amount) {
+		inventoryService.subtractInventory(amount);
+		return "Sold inventory";
+	}
 
-    @ShellMethod("Buy new inventory")
-    public String purchase() {
+	@ShellMethod("Buy new inventory")
+	public String purchase(int amount) {
 
-        // Do a request to the Purchase service
+		// Request to the Purchase service should be done here!!!
+		inventoryService.addInventory(amount);
+		return "More " + amount + " items in the inventory";
+	}
 
-        inventoryService.addInventory(50);
+	@ShellMethod("Get Current inventory")
+	public String current() {
+		return "Current inventory: " + inventoryService.getCurrentInventory();
 
-        return "Jeej new inventory";
-    }
-
-    @ShellMethod("Get Current inventory")
-    public String current(){
-
-        return "Current inventory: " +  inventoryService.getCurrentInventory();
-
-    }
-
-
+	}
 }

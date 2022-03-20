@@ -1,21 +1,71 @@
 plugins {
+	// Apply the usual Spring boot plugins
 	id 'org.springframework.boot' version '2.4.3'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	// Apply the Gradle JAXB plugin
+	id 'com.intershop.gradle.jaxb' version '4.4.1'
+	// Appy the Java plugin
 	id 'java'
 }
 
+// Define group-id, version and Java 11 compatibility
 group = 'nl.utwente.soa'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+// Define JAXB configuration
+configurations {
+	jaxb
+}
+
 repositories {
+	// Use Maven to resolve dependencies
 	mavenCentral()
 }
 
+jaxb {
+	// Generate Java code from WSDL file
+	javaGen {
+		// Generation rules for the Purchase service (client)
+		purchasing {
+			// Defines the package of the generated Java classes
+			packageName = 'nl.utwente.soa.purchaseClient'
+			// Defines the path to the WSDL file
+			schema = file('src/main/resources/wsdl/PurchaseOrderService.wsdl')
+			language = "WSDL"
+		}
+		// Generation rules for the Inventory service (server)
+//		inventoring {
+//			// Defines the package of the generated Java classes
+//			packageName = 'nl.utwente.soa.inventory.webservice'
+//			// Defines the path to the WSDL file
+//			schema = file('src/main/resources/wsdl/InventorySOAPService.wsdl')
+//			language = "WSDL"
+//		}
+	}
+}
+
 dependencies {
+	//	To be removed if Shell is not necessary
 	implementation 'org.springframework.shell:spring-shell-starter:2.0.0.RELEASE'
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation ('org.springframework.boot:spring-boot-starter-web-services')
+			// Remove this exclusion if Tomcat server needs to be started
+			{ exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat' }
+
+
+	// For Java 11: Add dependencies to JAXB modules including runtime
+	implementation 'org.glassfish.jaxb:jaxb-runtime'
+
+	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.11'
+	jaxb group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.11'
+	jaxb group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.2.11'
+	jaxb group: 'com.sun.xml.bind', name: 'jaxb-xjc', version: '2.2.11'
+	jaxb group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.2.11'
+	jaxb group: 'javax.activation', name: 'activation', version: '1.1.1'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
 
 bootRun {
